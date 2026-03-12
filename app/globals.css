@@ -1,38 +1,35 @@
 @import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Lato:wght@300;400;700;900&display=swap");
 
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --gold: #c9873a;
+    --gold-light: #e8c785;
+    --gold-dim: rgba(201, 135, 58, 0.15);
+    --gold-glow: rgba(201, 135, 58, 0.08);
+    --bg: #fbf9f4;
+    --bg-card: #f5f3ed;
+    --bg-card2: #ede9e0;
+    --text: #2d1a0a;
+    --text-sub: #5c3d24;
+    --text-muted: #8b6f47;
+    --radius: 12px;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-stone-50 text-stone-800 font-sans leading-relaxed antialiased;
+  }
 }
 
-:root {
-  --gold: #c9873a;
-  --gold-light: #e8c785;
-  --gold-dim: rgba(201, 135, 58, 0.15);
-  --gold-glow: rgba(201, 135, 58, 0.08);
-  --bg: #fbf9f4;
-  --bg-card: #f5f3ed;
-  --bg-card2: #ede9e0;
-  --text: #2d1a0a;
-  --text-sub: #5c3d24;
-  --text-muted: #8b6f47;
-  --radius: 12px;
-}
-
-html {
-  scroll-behavior: smooth;
-}
-
-body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: "Lato", sans-serif;
-  min-height: 100vh;
-  line-height: 1.6;
-  -webkit-font-smoothing: antialiased;
+@layer components {
+  .text-balance {
+    text-wrap: balance;
+  }
 }
 
 /* Scrollbar */

@@ -31,169 +31,115 @@ export default function Navbar() {
     { href: "/register", label: "Create Profile", icon: "user" },
   ];
 
-  const nav = {
-    position: "sticky",
-    top: 0,
-    zIndex: 200,
-    background: scrolled ? "rgba(251,249,244,0.98)" : "rgba(251,249,244,0.85)",
-    borderBottom: "1px solid rgba(201,135,58,0.2)",
-    backdropFilter: "blur(14px)",
-    transition: "background 0.3s",
-    padding: "0 32px",
-    height: 68,
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "space-between",
-  };
-
   const active = (href) => pathname === href;
 
   return (
-    <nav style={nav}>
-      {/* Logo */}
-      <Link
-        href="/"
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: 10,
-          textDecoration: "none",
-        }}
-      >
-        <div
-          style={{
-            width: 38,
-            height: 38,
-            borderRadius: "50%",
-            background: "linear-gradient(135deg,#c9873a,#e8a857)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            boxShadow: "0 4px 16px rgba(201,135,58,0.3)",
-          }}
+    <nav
+      className={`sticky top-0 z-50 transition-all duration-300 ${scrolled ? "bg-stone-50/98 shadow-sm" : "bg-stone-50/85"} border-b border-amber-200/50 backdrop-blur-sm`}
+    >
+      <div className="px-4 sm:px-6 lg:px-8 py-3 sm:py-4 flex items-center justify-between gap-4">
+        {/* Logo */}
+        <Link
+          href="/"
+          className="flex items-center gap-2 sm:gap-3 no-underline"
         >
-          <Icon name="heart" size={18} color="#fbf9f4" />
-        </div>
-        <span
-          style={{
-            fontFamily: "'Cormorant Garamond',serif",
-            fontSize: 22,
-            fontWeight: 700,
-            color: "#2d1a0a",
-            letterSpacing: 0.5,
-          }}
-        >
-          BandhanConnect
-        </span>
-      </Link>
+          <div className="w-8 sm:w-10 h-8 sm:h-10 rounded-full bg-linear-to-r from-amber-600 to-amber-500 flex items-center justify-center shadow-md">
+            <Icon name="heart" size={16} color="#fbf9f4" />
+          </div>
+          <span className="font-serif font-bold text-base sm:text-lg lg:text-xl text-stone-800 hidden sm:inline">
+            BandhanConnect
+          </span>
+        </Link>
 
-      {/* Desktop links */}
-      <div style={{ display: "flex", gap: 4, alignItems: "center" }}>
-        {links.map((l) => (
-          <Link
-            key={l.href}
-            href={l.href}
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 7,
-              background: active(l.href)
-                ? "rgba(201,135,58,0.15)"
-                : "transparent",
-              color: active(l.href) ? "#2d1a0a" : "#a0704a",
-              border: active(l.href)
-                ? "1px solid rgba(201,135,58,0.35)"
-                : "1px solid transparent",
-              borderRadius: 8,
-              padding: "8px 16px",
-              fontFamily: "'Lato',sans-serif",
-              fontSize: 14,
-              textDecoration: "none",
-              transition: "all 0.2s",
-            }}
-          >
-            <Icon name={l.icon} size={15} /> {l.label}
-          </Link>
-        ))}
-      </div>
-
-      {/* Right side */}
-      <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-        {user ? (
-          <>
+        {/* Desktop Navigation */}
+        <div className="hidden md:flex items-center gap-1">
+          {links.map((l) => (
             <Link
-              href="/my-profile"
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: 8,
-                background: "rgba(201,135,58,0.1)",
-                color: "#2d1a0a",
-                border: "1px solid rgba(201,135,58,0.3)",
-                borderRadius: 8,
-                padding: "8px 14px",
-                fontFamily: "'Lato',sans-serif",
-                fontSize: 14,
-                textDecoration: "none",
-              }}
+              key={l.href}
+              href={l.href}
+              className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-all text-sm font-medium ${
+                active(l.href)
+                  ? "bg-amber-100 border border-amber-300 text-stone-800"
+                  : "bg-transparent border border-transparent text-amber-700 hover:bg-amber-50"
+              }`}
             >
-              <img
-                src={
-                  user.photo ||
-                  `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=c9873a&color=fff`
-                }
-                alt={user.name}
-                style={{
-                  width: 26,
-                  height: 26,
-                  borderRadius: "50%",
-                  objectFit: "cover",
-                }}
-                onError={(e) => {
-                  e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=c9873a&color=fff`;
-                }}
-              />
-              {user.name.split(" ")[0]}
+              <Icon name={l.icon} size={14} />
+              <span className="hidden lg:inline">{l.label}</span>
             </Link>
-            <button
-              onClick={logout}
-              style={{
-                background: "none",
-                border: "1px solid rgba(201,135,58,0.2)",
-                color: "#a0704a",
-                borderRadius: 8,
-                padding: "8px 12px",
-                fontFamily: "'Lato',sans-serif",
-                fontSize: 13,
-                display: "flex",
-                alignItems: "center",
-                gap: 6,
-              }}
-              title="Logout"
+          ))}
+        </div>
+
+        {/* Right Section */}
+        <div className="flex items-center gap-2 sm:gap-3">
+          {user ? (
+            <>
+              <Link
+                href="/my-profile"
+                className="hidden sm:flex items-center gap-2 px-3 py-2 bg-amber-100 border border-amber-300 text-stone-800 rounded-lg text-sm font-medium hover:bg-amber-200 transition-colors"
+              >
+                <img
+                  src={
+                    user.photo ||
+                    `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=c9873a&color=fff`
+                  }
+                  alt={user.name}
+                  className="w-6 h-6 rounded-full object-cover"
+                  onError={(e) => {
+                    e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=c9873a&color=fff`;
+                  }}
+                />
+                <span className="hidden lg:inline">
+                  {user.name.split(" ")[0]}
+                </span>
+              </Link>
+              <button
+                onClick={logout}
+                className="p-2 hover:bg-amber-100 rounded-lg transition-colors"
+                title="Logout"
+              >
+                <Icon name="logout" size={16} color="#a0704a" />
+              </button>
+            </>
+          ) : (
+            <Link
+              href="/register"
+              className="bg-linear-to-r from-amber-600 to-amber-500 hover:from-amber-700 hover:to-amber-600 text-white px-3 sm:px-4 py-2 rounded-lg text-sm font-semibold transition-all shadow-md"
             >
-              <Icon name="logout" size={15} /> Logout
-            </button>
-          </>
-        ) : (
-          <Link
-            href="/register"
-            style={{
-              background: "linear-gradient(135deg,#c9873a,#e8a857)",
-              color: "#fbf9f4",
-              border: "none",
-              borderRadius: 8,
-              padding: "9px 22px",
-              fontFamily: "'Lato',sans-serif",
-              fontSize: 14,
-              fontWeight: 700,
-              textDecoration: "none",
-              boxShadow: "0 4px 16px rgba(201,135,58,0.2)",
-            }}
-          >
-            Join Free
-          </Link>
-        )}
+              <span className="hidden sm:inline">Join Free</span>
+              <span className="sm:hidden text-xs">Join</span>
+            </Link>
+          )}
+        </div>
+
+        {/* Mobile Menu Button */}
+        <button
+          onClick={() => setMobileOpen(!mobileOpen)}
+          className="md:hidden p-2 hover:bg-amber-100 rounded-lg transition-colors"
+        >
+          <Icon name={mobileOpen ? "x" : "menu"} size={20} color="#a0704a" />
+        </button>
       </div>
+
+      {/* Mobile Navigation */}
+      {mobileOpen && (
+        <div className="md:hidden border-t border-amber-200/50 bg-stone-50/95 px-4 py-3 space-y-2">
+          {links.map((l) => (
+            <Link
+              key={l.href}
+              href={l.href}
+              onClick={() => setMobileOpen(false)}
+              className={`flex items-center gap-2 w-full px-3 py-2 rounded-lg transition-all text-sm font-medium ${
+                active(l.href)
+                  ? "bg-amber-100 border border-amber-300 text-stone-800"
+                  : "bg-transparent text-amber-700 hover:bg-amber-50"
+              }`}
+            >
+              <Icon name={l.icon} size={16} />
+              {l.label}
+            </Link>
+          ))}
+        </div>
+      )}
     </nav>
   );
 }

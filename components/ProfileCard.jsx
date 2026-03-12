@@ -13,159 +13,57 @@ export default function ProfileCard({
   const heightShort = profile.height ? profile.height.split(" ")[0] : "";
 
   return (
-    <div
-      className="profile-card"
-      style={{
-        background: "linear-gradient(145deg,#f5f3ed,#ede9e0)",
-        border: "1px solid rgba(201,135,58,0.22)",
-        borderRadius: 16,
-        overflow: "hidden",
-        position: "relative",
-        display: "flex",
-        flexDirection: "column",
-      }}
-    >
+    <div className="bg-gradient-to-br from-stone-100 to-stone-50 border border-amber-200/50 rounded-2xl overflow-hidden relative flex flex-col hover:shadow-lg transition-shadow">
       {/* Match badge */}
       {matchScore != null && (
-        <div
-          className="match-badge"
-          style={{
-            position: "absolute",
-            top: 12,
-            right: 12,
-            zIndex: 2,
-            background: "linear-gradient(135deg,#c9873a,#e8a857)",
-            color: "#fbf9f4",
-            fontSize: 11,
-            fontWeight: 700,
-            padding: "4px 10px",
-            borderRadius: 20,
-            fontFamily: "'Lato',sans-serif",
-          }}
-        >
+        <div className="absolute top-3 right-3 z-20 bg-gradient-to-r from-amber-600 to-amber-500 text-white text-xs font-bold px-2 py-1 rounded-full">
           {matchScore}% Match
         </div>
       )}
 
       {/* Verified badge */}
       {profile.verified && (
-        <div
-          style={{
-            position: "absolute",
-            top: matchScore != null ? 44 : 12,
-            right: 12,
-            zIndex: 2,
-            background: "rgba(76,175,80,0.15)",
-            border: "1px solid rgba(76,175,80,0.4)",
-            borderRadius: 20,
-            padding: "3px 8px",
-            display: "flex",
-            alignItems: "center",
-            gap: 4,
-            fontFamily: "'Lato',sans-serif",
-            fontSize: 11,
-            color: "#4CAF50",
-          }}
-        >
-          <Icon name="verified" size={11} color="#4CAF50" /> Verified
+        <div className={`absolute ${matchScore != null ? 'top-12' : 'top-3'} right-3 z-20 bg-green-100/50 border border-green-400/50 rounded-full px-2 py-1 flex items-center gap-1`}>
+          <Icon name="verified" size={11} color="#4CAF50" />
+          <span className="text-xs font-semibold text-green-700">Verified</span>
         </div>
       )}
 
       {/* Photo */}
-      <div
-        style={{
-          position: "relative",
-          paddingTop: "75%",
-          background: "#ede9e0",
-        }}
-      >
+      <div className="relative w-full aspect-[3/4] bg-stone-200 overflow-hidden">
         <img
           src={
             profile.photo ||
             `https://ui-avatars.com/api/?name=${encodeURIComponent(profile.name)}&background=c9873a&color=fff&size=300`
           }
           alt={profile.name}
-          style={{
-            position: "absolute",
-            inset: 0,
-            width: "100%",
-            height: "100%",
-            objectFit: "cover",
-          }}
+          className="absolute inset-0 w-full h-full object-cover"
           onError={(e) => {
             e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(profile.name)}&background=c9873a&color=fff&size=300`;
           }}
         />
-        <div
-          style={{
+        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+      </div>
             position: "absolute",
             inset: 0,
             background:
-              "linear-gradient(to top, rgba(0,0,0,0.1) 0%, transparent 50%)",
-          }}
-        />
-      </div>
-
+  
       {/* Info */}
-      <div
-        style={{
-          padding: "16px 18px 18px",
-          flex: 1,
-          display: "flex",
-          flexDirection: "column",
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "flex-start",
-            marginBottom: 4,
-          }}
-        >
-          <h3
-            style={{
-              fontFamily: "'Cormorant Garamond',serif",
-              fontSize: 20,
-              color: "#2d1a0a",
-              fontWeight: 600,
-            }}
-          >
+      <div className="p-4 sm:p-5 flex-1 flex flex-col">
+        <div className="flex justify-between items-start mb-2">
+          <h3 className="font-serif font-bold text-lg sm:text-xl text-stone-800">
             {profile.name}
           </h3>
-          <span
-            style={{
-              fontSize: 12,
-              color: "#5c3d24",
-              fontFamily: "'Lato',sans-serif",
-              background: "rgba(201,135,58,0.1)",
-              padding: "2px 8px",
-              borderRadius: 10,
-            }}
-          >
+          <span className="text-xs font-semibold text-stone-700 bg-amber-100/50 px-2 py-1 rounded-full">
             {profile.gender === "Male" ? "♂" : "♀"}
           </span>
         </div>
 
-        <p
-          style={{
-            color: "#5c3d24",
-            fontSize: 13,
-            fontFamily: "'Lato',sans-serif",
-            marginBottom: 10,
-          }}
-        >
+        <p className="text-stone-700 text-xs sm:text-sm font-sans mb-3">
           {age} yrs · {heightShort} · {profile.maritalStatus}
         </p>
 
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: 4,
-            marginBottom: 12,
-          }}
-        >
+        <div className="flex flex-col gap-2 mb-3">
           {[
             ["user", profile.profession],
             ["location", profile.city],
@@ -173,42 +71,21 @@ export default function ProfileCard({
           ].map(([icon, text]) => (
             <span
               key={icon}
-              style={{
-                color: "#8b6f47",
-                fontSize: 13,
-                fontFamily: "'Lato',sans-serif",
-                display: "flex",
-                alignItems: "center",
-                gap: 6,
-              }}
+              className="text-amber-900 text-xs sm:text-sm font-sans flex items-center gap-2"
             >
-              <Icon name={icon} size={12} color="#a0704a" /> {text}
+              <Icon name={icon} size={12} color="#a0704a" />
+              <span className="truncate">{text}</span>
             </span>
           ))}
         </div>
 
         {/* Match reasons tags */}
         {matchReasons.length > 0 && (
-          <div
-            style={{
-              display: "flex",
-              flexWrap: "wrap",
-              gap: 4,
-              marginBottom: 12,
-            }}
-          >
+          <div className="flex flex-wrap gap-2 mb-3">
             {matchReasons.slice(0, 3).map((r, i) => (
               <span
                 key={i}
-                style={{
-                  background: "rgba(201,135,58,0.1)",
-                  border: "1px solid rgba(201,135,58,0.2)",
-                  color: "#5c3d24",
-                  fontSize: 11,
-                  padding: "2px 8px",
-                  borderRadius: 10,
-                  fontFamily: "'Lato',sans-serif",
-                }}
+                className="bg-amber-100 border border-amber-300 text-stone-700 text-xs px-2 py-1 rounded-full font-sans truncate"
               >
                 {r}
               </span>
@@ -217,23 +94,10 @@ export default function ProfileCard({
         )}
 
         {/* Actions */}
-        <div style={{ display: "flex", gap: 8, marginTop: "auto" }}>
+        <div className="flex gap-2 mt-auto">
           <Link
             href={`/profile/${profile.id}`}
-            style={{
-              flex: 1,
-              background: "linear-gradient(135deg,#c9873a,#e8a857)",
-              color: "#fbf9f4",
-              borderRadius: 8,
-              padding: "9px",
-              fontSize: 13,
-              fontWeight: 700,
-              fontFamily: "'Lato',sans-serif",
-              textDecoration: "none",
-              textAlign: "center",
-              display: "block",
-              transition: "opacity 0.2s",
-            }}
+            className="flex-1 bg-gradient-to-r from-amber-600 to-amber-500 hover:from-amber-700 hover:to-amber-600 text-white rounded-lg py-2 text-xs sm:text-sm font-bold font-sans text-center block transition-all"
           >
             View Profile
           </Link>
@@ -243,15 +107,7 @@ export default function ProfileCard({
                 e.stopPropagation();
                 onShare(profile);
               }}
-              style={{
-                background: "rgba(201,135,58,0.12)",
-                color: "#a0704a",
-                border: "1px solid rgba(201,135,58,0.28)",
-                borderRadius: 8,
-                padding: "9px 13px",
-                display: "flex",
-                alignItems: "center",
-              }}
+              className="bg-amber-100 hover:bg-amber-200 text-amber-700 border border-amber-300 rounded-lg px-3 py-2 transition-colors"
               title="Share profile"
             >
               <Icon name="share" size={16} />

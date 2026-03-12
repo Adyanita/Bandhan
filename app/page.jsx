@@ -63,162 +63,54 @@ export default function HomePage() {
       <Navbar />
 
       <main>
-        {/* ── Hero ─────────────────────────────────────────────── */}
-        <section
-          style={{
-            textAlign: "center",
-            padding: "80px 40px 90px",
-            position: "relative",
-            overflow: "hidden",
-          }}
-        >
-          <div
-            style={{
-              position: "absolute",
-              inset: 0,
-              background:
-                "radial-gradient(ellipse 70% 60% at 50% 40%, rgba(201,135,58,0.13) 0%, transparent 70%)",
-              pointerEvents: "none",
-            }}
-          />
-          <div
-            style={{
-              position: "absolute",
-              top: -120,
-              left: -100,
-              width: 400,
-              height: 400,
-              background:
-                "radial-gradient(circle, rgba(201,135,58,0.06) 0%, transparent 70%)",
-              pointerEvents: "none",
-            }}
-          />
-          <p
-            style={{
-              color: "#a0704a",
-              fontFamily: "'Cormorant Garamond',serif",
-              fontSize: 17,
-              letterSpacing: 5,
-              marginBottom: 18,
-              textTransform: "uppercase",
-            }}
-          >
-            ✦ Find Your Soulmate ✦
-          </p>
-          <h1
-            style={{
-              fontFamily: "'Cormorant Garamond',serif",
-              fontSize: "clamp(42px, 6vw, 72px)",
-              fontWeight: 700,
-              color: "#2d1a0a",
-              lineHeight: 1.1,
-              marginBottom: 22,
-              maxWidth: 720,
-              margin: "0 auto 22px",
-            }}
-          >
-            Where Hearts
-            <br />
-            <em style={{ color: "#a0704a", fontStyle: "italic" }}>
-              Find Their Home
-            </em>
-          </h1>
-          <p
-            style={{
-              color: "#5c3d24",
-              fontFamily: "'Lato',sans-serif",
-              fontSize: 17,
-              maxWidth: 540,
-              margin: "0 auto 44px",
-              lineHeight: 1.75,
-            }}
-          >
-            India's most trusted free matrimonial platform. Match by religion,
-            caste, values, education and more across all communities.
-          </p>
-          <div
-            style={{
-              display: "flex",
-              gap: 16,
-              justifyContent: "center",
-              flexWrap: "wrap",
-            }}
-          >
-            <Link
-              href="/register"
-              style={{
-                background: "linear-gradient(135deg,#c9873a,#e8a857)",
-                color: "#fbf9f4",
-                borderRadius: 14,
-                padding: "17px 44px",
-                textDecoration: "none",
-                fontFamily: "'Lato',sans-serif",
-                fontSize: 17,
-                fontWeight: 700,
-                boxShadow: "0 8px 32px rgba(201,135,58,0.2)",
-                transition: "transform 0.2s, box-shadow 0.2s",
-              }}
-            >
-              Create Free Profile
-            </Link>
-            <Link
-              href="/matches"
-              style={{
-                background: "rgba(201,135,58,0.1)",
-                color: "#2d1a0a",
-                border: "1px solid rgba(201,135,58,0.35)",
-                borderRadius: 14,
-                padding: "17px 44px",
-                textDecoration: "none",
-                fontFamily: "'Lato',sans-serif",
-                fontSize: 17,
-              }}
-            >
-              Browse Profiles →
-            </Link>
+        {/* Hero Section */}
+        <section className="relative px-4 sm:px-6 lg:px-8 py-16 sm:py-20 lg:py-28 text-center overflow-hidden">
+          {/* Background gradient */}
+          <div className="absolute inset-0 bg-gradient-radial from-amber-100/20 to-transparent pointer-events-none" />
+          <div className="absolute top-0 left-0 w-96 h-96 bg-gradient-radial from-amber-100/10 to-transparent rounded-full pointer-events-none" />
+          
+          <div className="relative z-10">
+            <p className="text-xs sm:text-sm lg:text-base font-serif font-medium text-amber-700 tracking-widest uppercase mb-4 sm:mb-6">
+              ✦ Find Your Soulmate ✦
+            </p>
+            <h1 className="font-serif font-bold text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl text-stone-800 leading-tight mb-4 sm:mb-6 max-w-5xl mx-auto">
+              Where Hearts
+              <br />
+              <em className="text-amber-700 italic block">Find Their Home</em>
+            </h1>
+            <p className="text-stone-700 font-sans text-sm sm:text-base lg:text-lg max-w-2xl mx-auto mb-6 sm:mb-8 leading-relaxed px-2">
+              India's most trusted free matrimonial platform. Match by religion,
+              caste, values, education and more across all communities.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center">
+              <Link
+                href="/register"
+                className="w-full sm:w-auto bg-gradient-to-r from-amber-600 to-amber-500 hover:from-amber-700 hover:to-amber-600 text-white font-semibold py-3 px-6 sm:px-8 rounded-lg shadow-lg transition-all duration-300 transform hover:scale-105"
+              >
+                Create Free Profile
+              </Link>
+              <Link
+                href="/matches"
+                className="w-full sm:w-auto border-2 border-amber-600 text-amber-700 hover:bg-amber-600 hover:text-white font-semibold py-3 px-6 sm:px-8 rounded-lg transition-all duration-300"
+              >
+                Browse Profiles →
+              </Link>
+            </div>
           </div>
         </section>
 
-        {/* ── Stats ────────────────────────────────────────────── */}
-        <section style={{ padding: "0 40px 70px" }}>
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(4,1fr)",
-              gap: 18,
-              maxWidth: 1100,
-              margin: "0 auto",
-            }}
-          >
+        {/* Stats Section */}
+        <section className="px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20">
+          <div className="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
             {STATS.map(([n, l]) => (
               <div
                 key={l}
-                style={{
-                  background: "linear-gradient(145deg,#f5f3ed,#ede9e0)",
-                  border: "1px solid rgba(201,135,58,0.18)",
-                  borderRadius: 14,
-                  padding: "28px 20px",
-                  textAlign: "center",
-                }}
+                className="bg-gradient-to-br from-stone-100 to-stone-50 border border-amber-200/50 rounded-xl sm:rounded-2xl p-4 sm:p-6 lg:p-8 text-center hover:shadow-lg transition-shadow"
               >
-                <div
-                  style={{
-                    fontFamily: "'Cormorant Garamond',serif",
-                    fontSize: 38,
-                    fontWeight: 700,
-                    color: "#2d1a0a",
-                    marginBottom: 6,
-                  }}
-                >
+                <div className="font-serif font-bold text-2xl sm:text-3xl lg:text-4xl text-stone-800 mb-2">
                   {n}
                 </div>
-                <div
-                  style={{
-                    color: "#a0704a",
-                    fontFamily: "'Lato',sans-serif",
-                    fontSize: 13,
-                  }}
-                >
+                <div className="text-amber-700 font-sans text-xs sm:text-sm lg:text-base font-medium">
                   {l}
                 </div>
               </div>
@@ -226,313 +118,126 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ── How it works ─────────────────────────────────────── */}
-        <section
-          style={{ padding: "0 40px 80px", maxWidth: 1100, margin: "0 auto" }}
-        >
-          <div style={{ textAlign: "center", marginBottom: 50 }}>
-            <h2
-              style={{
-                fontFamily: "'Cormorant Garamond',serif",
-                fontSize: 46,
-                color: "#2d1a0a",
-                marginBottom: 12,
-              }}
-            >
-              How It Works
-            </h2>
-            <p
-              style={{
-                color: "#5c3d24",
-                fontFamily: "'Lato',sans-serif",
-                fontSize: 15,
-              }}
-            >
-              Find your life partner in three simple steps
-            </p>
-          </div>
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(3,1fr)",
-              gap: 24,
-            }}
-          >
-            {HOW.map((h, i) => (
-              <div
-                key={i}
-                style={{
-                  background: "linear-gradient(145deg,#f5f3ed,#ede9e0)",
-                  border: "1px solid rgba(201,135,58,0.18)",
-                  borderRadius: 16,
-                  padding: "36px 28px",
-                  textAlign: "center",
-                  position: "relative",
-                }}
-              >
-                <div
-                  style={{
-                    position: "absolute",
-                    top: 20,
-                    left: 24,
-                    fontFamily: "'Cormorant Garamond',serif",
-                    fontSize: 56,
-                    color: "rgba(201,135,58,0.08)",
-                    fontWeight: 700,
-                    lineHeight: 1,
-                  }}
-                >
-                  {i + 1}
-                </div>
-                <div
-                  style={{
-                    width: 64,
-                    height: 64,
-                    borderRadius: "50%",
-                    background:
-                      "linear-gradient(135deg,rgba(201,135,58,0.12),rgba(232,199,133,0.08))",
-                    border: "1px solid rgba(201,135,58,0.28)",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    margin: "0 auto 22px",
-                  }}
-                >
-                  <Icon name={h.icon} size={26} color="#a0704a" />
-                </div>
-                <h3
-                  style={{
-                    fontFamily: "'Cormorant Garamond',serif",
-                    fontSize: 24,
-                    color: "#2d1a0a",
-                    marginBottom: 12,
-                  }}
-                >
-                  {h.title}
-                </h3>
-                <p
-                  style={{
-                    color: "#5c3d24",
-                    fontFamily: "'Lato',sans-serif",
-                    fontSize: 14,
-                    lineHeight: 1.75,
-                  }}
-                >
-                  {h.desc}
-                </p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* ── Why BandhanConnect ───────────────────────────────── */}
-        <section
-          style={{ padding: "0 40px 80px", maxWidth: 1100, margin: "0 auto" }}
-        >
-          <h2
-            style={{
-              fontFamily: "'Cormorant Garamond',serif",
-              fontSize: 42,
-              color: "#2d1a0a",
-              textAlign: "center",
-              marginBottom: 44,
-            }}
-          >
-            Why Choose Us?
-          </h2>
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(4,1fr)",
-              gap: 20,
-            }}
-          >
-            {WHY.map((w) => (
-              <div
-                key={w.title}
-                style={{
-                  background: "rgba(201,135,58,0.08)",
-                  border: "1px solid rgba(201,135,58,0.15)",
-                  borderRadius: 14,
-                  padding: "26px 22px",
-                  textAlign: "center",
-                }}
-              >
-                <div style={{ marginBottom: 14 }}>
-                  <Icon name={w.icon} size={28} color="#a0704a" />
-                </div>
-                <h4
-                  style={{
-                    fontFamily: "'Cormorant Garamond',serif",
-                    fontSize: 19,
-                    color: "#2d1a0a",
-                    marginBottom: 10,
-                  }}
-                >
-                  {w.title}
-                </h4>
-                <p
-                  style={{
-                    color: "#5c3d24",
-                    fontFamily: "'Lato',sans-serif",
-                    fontSize: 13,
-                    lineHeight: 1.65,
-                  }}
-                >
-                  {w.desc}
-                </p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* ── Featured profiles ────────────────────────────────── */}
-        <section
-          style={{ padding: "0 40px 80px", maxWidth: 1200, margin: "0 auto" }}
-        >
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              marginBottom: 32,
-            }}
-          >
-            <div>
-              <h2
-                style={{
-                  fontFamily: "'Cormorant Garamond',serif",
-                  fontSize: 40,
-                  color: "#2d1a0a",
-                  marginBottom: 6,
-                }}
-              >
-                Featured Profiles
+        {/* How It Works Section */}
+        <section className="px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-24">
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center mb-8 sm:mb-12 lg:mb-16">
+              <h2 className="font-serif font-bold text-2xl sm:text-3xl lg:text-4xl xl:text-5xl text-stone-800 mb-2 sm:mb-4">
+                How It Works
               </h2>
-              <p
-                style={{
-                  color: "#5c3d24",
-                  fontFamily: "'Lato',sans-serif",
-                  fontSize: 14,
-                }}
-              >
-                Verified profiles from across India and abroad
+              <p className="text-stone-700 font-sans text-sm sm:text-base lg:text-lg">
+                Find your life partner in three simple steps
               </p>
             </div>
-            <Link
-              href="/matches"
-              style={{
-                background: "rgba(201,135,58,0.1)",
-                border: "1px solid rgba(201,135,58,0.28)",
-                color: "#a0704a",
-                borderRadius: 8,
-                padding: "10px 20px",
-                textDecoration: "none",
-                fontFamily: "'Lato',sans-serif",
-                fontSize: 14,
-                display: "flex",
-                alignItems: "center",
-                gap: 8,
-              }}
-            >
-              View All →
-            </Link>
-          </div>
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(4,1fr)",
-              gap: 22,
-            }}
-          >
-            {SAMPLE_PROFILES.slice(0, 4).map((p) => (
-              <ProfileCard key={p.id} profile={p} onShare={setShareProfile} />
-            ))}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
+              {HOW.map((h, i) => (
+                <div
+                  key={i}
+                  className="bg-gradient-to-br from-stone-100 to-stone-50 border border-amber-200/50 rounded-xl sm:rounded-2xl p-6 sm:p-8 lg:p-10 text-center relative hover:shadow-lg transition-shadow"
+                >
+                  <div className="absolute top-4 left-6 font-serif text-6xl sm:text-7xl text-amber-100 font-bold leading-none opacity-50">
+                    {i + 1}
+                  </div>
+                  <div className="relative z-10">
+                    <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-gradient-to-br from-amber-100 to-stone-100 border border-amber-300 flex items-center justify-center mx-auto mb-4">
+                      <Icon name={h.icon} size={24} color="#a0704a" />
+                    </div>
+                    <h3 className="font-serif font-bold text-lg sm:text-xl lg:text-2xl text-stone-800 mb-2 sm:mb-3">
+                      {h.title}
+                    </h3>
+                    <p className="text-stone-600 font-sans text-xs sm:text-sm lg:text-base leading-relaxed">
+                      {h.desc}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </section>
 
-        {/* ── CTA Banner ───────────────────────────────────────── */}
-        <section
-          style={{ padding: "0 40px 80px", maxWidth: 1100, margin: "0 auto" }}
-        >
-          <div
-            style={{
-              background:
-                "linear-gradient(135deg,rgba(201,135,58,0.12),rgba(232,199,133,0.08))",
-              border: "1px solid rgba(201,135,58,0.3)",
-              borderRadius: 20,
-              padding: "60px 48px",
-              textAlign: "center",
-              position: "relative",
-              overflow: "hidden",
-            }}
-          >
-            <div
-              style={{
-                position: "absolute",
-                inset: 0,
-                background:
-                  "radial-gradient(circle at 50% 0%, rgba(201,135,58,0.08) 0%, transparent 60%)",
-                pointerEvents: "none",
-              }}
-            />
-            <h2
-              style={{
-                fontFamily: "'Cormorant Garamond',serif",
-                fontSize: 44,
-                color: "#2d1a0a",
-                marginBottom: 16,
-              }}
-            >
-              Your Perfect Match is Waiting
+
+        {/* Why Choose Us Section */}
+        <section className="px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-24 bg-stone-50">
+          <div className="max-w-6xl mx-auto">
+            <h2 className="font-serif font-bold text-2xl sm:text-3xl lg:text-4xl xl:text-5xl text-stone-800 text-center mb-8 sm:mb-12 lg:mb-16">
+              Why Choose Us?
             </h2>
-            <p
-              style={{
-                color: "#5c3d24",
-                fontFamily: "'Lato',sans-serif",
-                fontSize: 16,
-                marginBottom: 36,
-                maxWidth: 480,
-                margin: "0 auto 36px",
-              }}
-            >
-              Join thousands of happy couples who found love on BandhanConnect.
-              It's free, always.
-            </p>
-            <Link
-              href="/register"
-              style={{
-                background: "linear-gradient(135deg,#c9873a,#e8a857)",
-                color: "#fbf9f4",
-                borderRadius: 12,
-                padding: "16px 48px",
-                textDecoration: "none",
-                fontFamily: "'Lato',sans-serif",
-                fontSize: 17,
-                fontWeight: 700,
-                boxShadow: "0 8px 32px rgba(201,135,58,0.2)",
-                display: "inline-block",
-              }}
-            >
-              Get Started — It's Free
-            </Link>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
+              {WHY.map((w) => (
+                <div
+                  key={w.title}
+                  className="bg-white border border-amber-200/50 rounded-xl sm:rounded-2xl p-5 sm:p-6 lg:p-8 text-center hover:shadow-lg transition-shadow"
+                >
+                  <div className="mb-3 sm:mb-4 flex justify-center">
+                    <Icon name={w.icon} size={32} color="#a0704a" />
+                  </div>
+                  <h4 className="font-serif font-bold text-base sm:text-lg lg:text-xl text-stone-800 mb-2 sm:mb-3">
+                    {w.title}
+                  </h4>
+                  <p className="text-stone-600 font-sans text-xs sm:text-sm lg:text-base leading-relaxed">
+                    {w.desc}
+                  </p>
+                </div>
+              ))}
+            </div>
           </div>
         </section>
+
+        {/* Featured Profiles Section */}
+        <section className="px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-24">
+          <div className="max-w-7xl mx-auto">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 sm:gap-6 mb-8 sm:mb-12 lg:mb-16">
+              <div>
+                <h2 className="font-serif font-bold text-2xl sm:text-3xl lg:text-4xl text-stone-800 mb-2">
+                  Featured Profiles
+                </h2>
+                <p className="text-stone-600 font-sans text-xs sm:text-sm lg:text-base">
+                  Verified profiles from across India and abroad
+                </p>
+              </div>
+              <Link
+                href="/matches"
+                className="w-full sm:w-auto text-center px-4 sm:px-6 py-2 sm:py-3 bg-amber-100 hover:bg-amber-200 border border-amber-300 text-amber-700 rounded-lg font-sans text-sm font-medium transition-colors"
+              >
+                View All →
+              </Link>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
+              {SAMPLE_PROFILES.slice(0, 4).map((p) => (
+                <ProfileCard key={p.id} profile={p} onShare={setShareProfile} />
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* CTA Banner */}
+        <section className="px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-24">
+          <div className="max-w-4xl mx-auto bg-gradient-to-br from-amber-100 to-stone-50 border-2 border-amber-300 rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-12 text-center relative overflow-hidden">
+            <div className="absolute inset-0 bg-radial opacity-20 pointer-events-none" />
+            <div className="relative z-10">
+              <h2 className="font-serif font-bold text-2xl sm:text-3xl lg:text-4xl xl:text-5xl text-stone-800 mb-4 sm:mb-6">
+                Your Perfect Match is Waiting
+              </h2>
+              <p className="text-stone-700 font-sans text-sm sm:text-base lg:text-lg mb-6 sm:mb-8 max-w-2xl mx-auto px-2">
+                Join thousands of happy couples who found love on BandhanConnect.
+                It's free, always.
+              </p>
+              <Link
+                href="/register"
+                className="inline-block bg-gradient-to-r from-amber-600 to-amber-500 hover:from-amber-700 hover:to-amber-600 text-white font-semibold py-3 px-8 rounded-lg shadow-lg transition-all duration-300 transform hover:scale-105"
+              >
+                Get Started — It's Free
+              </Link>
+            </div>
+          </div>
+        </section>
+
       </main>
 
       {/* Footer */}
-      <footer
-        style={{
-          borderTop: "1px solid rgba(201,135,58,0.15)",
-          padding: "32px 40px",
-          textAlign: "center",
-          color: "rgba(201,135,58,0.6)",
-          fontFamily: "'Lato',sans-serif",
-          fontSize: 13,
-        }}
-      >
-        © {new Date().getFullYear()} BandhanConnect · Free matrimonial platform
-        · Made with ♥ in India
+      <footer className="border-t border-amber-200 px-4 sm:px-6 lg:px-8 py-6 sm:py-8 text-center text-amber-700/60 font-sans text-xs sm:text-sm">
+        © {new Date().getFullYear()} BandhanConnect · Free matrimonial platform ·
+        Made with ♥ in India
       </footer>
 
       {shareProfile && (
