@@ -23,7 +23,9 @@ export default function ProfileCard({
 
       {/* Verified badge */}
       {profile.verified && (
-        <div className={`absolute ${matchScore != null ? 'top-12' : 'top-3'} right-3 z-20 bg-green-100/50 border border-green-400/50 rounded-full px-2 py-1 flex items-center gap-1`}>
+        <div
+          className={`absolute ${matchScore != null ? "top-12" : "top-3"} right-3 z-20 bg-green-100/50 border border-green-400/50 rounded-full px-2 py-1 flex items-center gap-1`}
+        >
           <Icon name="verified" size={11} color="#4CAF50" />
           <span className="text-xs font-semibold text-green-700">Verified</span>
         </div>
@@ -44,10 +46,7 @@ export default function ProfileCard({
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
       </div>
-            position: "absolute",
-            inset: 0,
-            background:
-  
+
       {/* Info */}
       <div className="p-4 sm:p-5 flex-1 flex flex-col">
         <div className="flex justify-between items-start mb-2">
