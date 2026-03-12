@@ -68,7 +68,7 @@ export default function HomePage() {
           {/* Background gradient */}
           <div className="absolute inset-0 bg-gradient-radial from-amber-100/20 to-transparent pointer-events-none" />
           <div className="absolute top-0 left-0 w-96 h-96 bg-gradient-radial from-amber-100/10 to-transparent rounded-full pointer-events-none" />
-          
+
           <div className="relative z-10">
             <p className="text-xs sm:text-sm lg:text-base font-serif font-medium text-amber-700 tracking-widest uppercase mb-4 sm:mb-6">
               ✦ Find Your Soulmate ✦
@@ -81,6 +81,7 @@ export default function HomePage() {
             <p className="text-stone-700 font-sans text-sm sm:text-base lg:text-lg max-w-2xl mx-auto mb-6 sm:mb-8 leading-relaxed px-2">
               India's most trusted free matrimonial platform. Match by religion,
               caste, values, education and more across all communities.
+              Sponsured by Rajnish Mishra.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center">
               <Link
@@ -155,7 +156,6 @@ export default function HomePage() {
           </div>
         </section>
 
-
         {/* Why Choose Us Section */}
         <section className="px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-24 bg-stone-50">
           <div className="max-w-6xl mx-auto">
@@ -219,8 +219,8 @@ export default function HomePage() {
                 Your Perfect Match is Waiting
               </h2>
               <p className="text-stone-700 font-sans text-sm sm:text-base lg:text-lg mb-6 sm:mb-8 max-w-2xl mx-auto px-2">
-                Join thousands of happy couples who found love on BandhanConnect.
-                It's free, always.
+                Join thousands of happy couples who found love on
+                BandhanConnect. It's free, always.
               </p>
               <Link
                 href="/register"
@@ -231,13 +231,12 @@ export default function HomePage() {
             </div>
           </div>
         </section>
-
       </main>
 
       {/* Footer */}
       <footer className="border-t border-amber-200 px-4 sm:px-6 lg:px-8 py-6 sm:py-8 text-center text-amber-700/60 font-sans text-xs sm:text-sm">
-        © {new Date().getFullYear()} BandhanConnect · Free matrimonial platform ·
-        Made with ♥ in India
+        © {new Date().getFullYear()} BandhanConnect · Free matrimonial platform
+        · Made with ♥ in India
       </footer>
 
       {shareProfile && (
