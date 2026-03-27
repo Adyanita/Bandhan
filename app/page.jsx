@@ -219,8 +219,8 @@ export default function HomePage() {
                 Your Perfect Match is Waiting
               </h2>
               <p className="text-stone-700 font-sans text-sm sm:text-base lg:text-lg mb-6 sm:mb-8 max-w-2xl mx-auto px-2">
-                Join thousands of happy couples who found love on
-                BandhanConnect. It's free, always.
+                Join thousands of happy couples who found love on Sampark Sutra.
+                It's free, always.
               </p>
               <Link
                 href="/register"
@@ -235,8 +235,8 @@ export default function HomePage() {
 
       {/* Footer */}
       <footer className="border-t border-amber-200 px-4 sm:px-6 lg:px-8 py-6 sm:py-8 text-center text-amber-700/60 font-sans text-xs sm:text-sm">
-        © {new Date().getFullYear()} BandhanConnect · Free matrimonial platform
-        · Made with ♥ in India
+        © {new Date().getFullYear()} Sampark Sutra · Free matrimonial platform ·
+        Made with ♥ in India
       </footer>
 
       {shareProfile && (

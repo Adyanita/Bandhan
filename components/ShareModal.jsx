@@ -16,9 +16,9 @@ export default function ShareModal({ profile, onClose }) {
     });
   };
 
-  const waUrl = `https://wa.me/?text=${encodeURIComponent(`Check out ${profile.name}'s profile on BandhanConnect: ${shareUrl}`)}`;
-  const mailUrl = `mailto:?subject=Profile on BandhanConnect&body=I found a great profile: ${profile.name}%0A${shareUrl}`;
-  const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(`Check out this profile on BandhanConnect!`)}&url=${encodeURIComponent(shareUrl)}`;
+  const waUrl = `https://wa.me/?text=${encodeURIComponent(`Check out ${profile.name}'s profile on Sampark Sutra: ${shareUrl}`)}`;
+  const mailUrl = `mailto:?subject=Profile on Sampark Sutra&body=I found a great profile: ${profile.name}%0A${shareUrl}`;
+  const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(`Check out this profile on Sampark Sutra!`)}&url=${encodeURIComponent(shareUrl)}`;
 
   const overlay = {
     position: "fixed",

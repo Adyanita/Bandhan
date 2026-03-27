@@ -47,7 +47,7 @@ export default function Navbar() {
             <Icon name="heart" size={16} color="#fbf9f4" />
           </div>
           <span className="font-serif font-bold text-base sm:text-lg lg:text-xl text-stone-800 hidden sm:inline">
-            BandhanConnect
+            Sampark Sutra
           </span>
         </Link>
 

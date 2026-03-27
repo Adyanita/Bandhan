@@ -1,4 +1,4 @@
-# 💍 BandhanConnect — Free Matrimonial Website
+# 💍 Sampark Sutra — Free Matrimonial Website
 
 A full-featured, free matrimonial web application built with **Next.js 14** (App Router), inspired by Shaadi.com. No paid plans, no hidden charges.
 
@@ -6,23 +6,24 @@ A full-featured, free matrimonial web application built with **Next.js 14** (App
 
 ## ✨ Features
 
-| Feature | Details |
-|---|---|
-| 🧾 Profile Creation | 4-step form: personal, background, career, family + partner prefs |
-| 🔍 Smart Matching | Algorithm scores by religion, caste, age, city, diet, education |
-| 🎛️ Advanced Filters | Filter by religion, caste, city, marital status, education, diet, profession, age range |
-| 📤 Share Profiles | WhatsApp, Email, Twitter, copy link |
-| 💌 Send Interest | Mark interest in profiles you like |
-| 👤 My Profile | View, edit, and manage your own profile |
-| 🔒 Persistence | Profiles saved in localStorage (or Supabase if configured) |
-| 📱 Responsive | Works on mobile, tablet, and desktop |
-| 🌙 Luxury Dark Theme | Warm gold-on-black design |
+| Feature              | Details                                                                                 |
+| -------------------- | --------------------------------------------------------------------------------------- |
+| 🧾 Profile Creation  | 4-step form: personal, background, career, family + partner prefs                       |
+| 🔍 Smart Matching    | Algorithm scores by religion, caste, age, city, diet, education                         |
+| 🎛️ Advanced Filters  | Filter by religion, caste, city, marital status, education, diet, profession, age range |
+| 📤 Share Profiles    | WhatsApp, Email, Twitter, copy link                                                     |
+| 💌 Send Interest     | Mark interest in profiles you like                                                      |
+| 👤 My Profile        | View, edit, and manage your own profile                                                 |
+| 🔒 Persistence       | Profiles saved in localStorage (or Supabase if configured)                              |
+| 📱 Responsive        | Works on mobile, tablet, and desktop                                                    |
+| 🌙 Luxury Dark Theme | Warm gold-on-black design                                                               |
 
 ---
 
 ## 🚀 Quick Start (5 minutes)
 
 ### 1. Prerequisites
+
 - **Node.js 18+** installed → [nodejs.org](https://nodejs.org)
 - A terminal / command prompt
 
@@ -40,6 +41,7 @@ npm run dev
 ```
 
 ### 3. Open in browser
+
 ```
 http://localhost:3000
 ```
@@ -92,6 +94,7 @@ bandhan-connect/
 Supabase is a free PostgreSQL database that makes profiles persist across devices/sessions.
 
 ### Step 1 — Create free Supabase project
+
 1. Go to [supabase.com](https://supabase.com) → Sign up (free)
 2. Create a new project
 3. Go to **Settings → API** and copy:
@@ -99,6 +102,7 @@ Supabase is a free PostgreSQL database that makes profiles persist across device
    - `anon public` key
 
 ### Step 2 — Create the profiles table
+
 In Supabase Dashboard → **SQL Editor**, run:
 
 ```sql
@@ -141,18 +145,21 @@ create policy "Owner update"  on public.profiles for update using (true);
 ```
 
 ### Step 3 — Add environment variables
+
 ```bash
 # Create .env.local from template
 cp .env.local.example .env.local
 ```
 
 Edit `.env.local`:
+
 ```env
 NEXT_PUBLIC_SUPABASE_URL=https://xxxx.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJ...
 ```
 
 ### Step 4 — Restart dev server
+
 ```bash
 npm run dev
 ```
@@ -183,21 +190,26 @@ Your site will be live at `https://bandhan-connect.vercel.app`
 ## 🎨 Customisation Guide
 
 ### Change brand name
-Search for `BandhanConnect` in all files and replace with your brand name.
+
+Search for `Sampark Sutra` in all files and replace with your brand name.
 
 ### Add/remove religions or castes
+
 Edit `lib/constants.js` — `RELIGIONS` and `CASTES_BY_RELIGION`.
 
 ### Change matching algorithm
+
 Edit `lib/matching.js` → `calcMatchScore()` function. Adjust point values for each factor.
 
 ### Change colors
+
 Edit `app/globals.css` — update the `:root` CSS variables:
+
 ```css
 :root {
-  --gold:       #c9873a;  /* Primary accent */
-  --gold-light: #f5c87a;  /* Headings */
-  --bg:         #0d0500;  /* Page background */
+  --gold: #c9873a; /* Primary accent */
+  --gold-light: #f5c87a; /* Headings */
+  --bg: #0d0500; /* Page background */
 }
 ```
 
@@ -220,6 +232,7 @@ Before going live, consider:
 ## 📞 Support
 
 If you run into issues:
+
 1. Make sure Node.js 18+ is installed: `node --version`
 2. Delete `node_modules` and run `npm install` again
 3. Check the browser console for errors

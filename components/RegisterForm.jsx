@@ -149,7 +149,7 @@ export default function RegisterForm({ editProfile = null, onSuccess }) {
     setToast(
       isEdit
         ? "Profile updated! ✨"
-        : "Profile created! Welcome to BandhanConnect 🎉",
+        : "Profile created! Welcome to Sampark Sutra 🎉",
     );
     setTimeout(() => router.push("/matches"), 1600);
   };
