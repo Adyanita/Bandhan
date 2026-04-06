@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Icon from "./Icon";
 import Toast from "./Toast";
@@ -17,7 +17,6 @@ import {
   INCOME_RANGES,
   CITIES,
 } from "../lib/constants";
-import { saveProfile, setCurrentUser, getCurrentUser } from "../lib/store";
 
 const STEPS = [
   { title: "Personal", subtitle: "Basic details about you" },
@@ -73,42 +72,102 @@ const inputStyle = (err) => ({
   transition: "border-color 0.2s",
 });
 
+function defaultFormValues() {
+  return {
+    name: "",
+    gender: "Male",
+    dob: "",
+    religion: "Hindu",
+    caste: "",
+    education: "",
+    profession: "",
+    city: "",
+    height: HEIGHTS[8],
+    maritalStatus: "Never Married",
+    diet: "Vegetarian",
+    complexion: "Fair",
+    bodyType: "Average",
+    income: "₹5L–₹10L",
+    about: "",
+    hobbies: "",
+    languages: "Hindi, English",
+    fatherProfession: "",
+    motherProfession: "",
+    siblings: "",
+    partnerReligion: "Any",
+    partnerMinAge: "22",
+    partnerMaxAge: "35",
+    partnerCity: "Any",
+    photo: "",
+  };
+}
+
+/** Map API / Prisma profile row to RegisterForm state */
+export function apiProfileToForm(p) {
+  if (!p) return defaultFormValues();
+  return {
+    name: p.name || "",
+    gender: p.gender || "Male",
+    dob: p.dob ? new Date(p.dob).toISOString().slice(0, 10) : "",
+    religion: p.religion || "Hindu",
+    caste: p.caste || "",
+    education: p.education || "",
+    profession: p.profession || "",
+    city: p.city || "",
+    height: p.height || HEIGHTS[8],
+    maritalStatus: p.maritalStatus || "Never Married",
+    diet: p.diet || "Vegetarian",
+    complexion: p.complexion || "Fair",
+    bodyType: p.bodyType || "Average",
+    income: p.income || "₹5L–₹10L",
+    about: p.about || "",
+    hobbies: p.hobbies || "",
+    languages: p.languages || "Hindi, English",
+    fatherProfession: p.fatherProfession || "",
+    motherProfession: p.motherProfession || "",
+    siblings: p.siblings || "",
+    partnerReligion: p.partnerReligion || "Any",
+    partnerMinAge:
+      p.partnerMinAge != null ? String(p.partnerMinAge) : "22",
+    partnerMaxAge:
+      p.partnerMaxAge != null ? String(p.partnerMaxAge) : "35",
+    partnerCity: p.partnerCity || "Any",
+    photo: p.photo || "",
+  };
+}
+
 export default function RegisterForm({ editProfile = null, onSuccess }) {
   const router = useRouter();
   const isEdit = Boolean(editProfile);
 
   const [step, setStep] = useState(1);
   const [toast, setToast] = useState(null);
-  const [form, setForm] = useState(
-    editProfile || {
-      name: "",
-      gender: "Male",
-      dob: "",
-      religion: "Hindu",
-      caste: "",
-      education: "",
-      profession: "",
-      city: "",
-      height: HEIGHTS[8],
-      maritalStatus: "Never Married",
-      diet: "Vegetarian",
-      complexion: "Fair",
-      bodyType: "Average",
-      income: "₹5L–₹10L",
-      about: "",
-      hobbies: "",
-      languages: "Hindi, English",
-      fatherProfession: "",
-      motherProfession: "",
-      siblings: "",
-      partnerReligion: "Any",
-      partnerMinAge: "22",
-      partnerMaxAge: "35",
-      partnerCity: "Any",
-      photo: "",
-    },
+  const [form, setForm] = useState(() =>
+    editProfile ? apiProfileToForm(editProfile) : defaultFormValues(),
   );
   const [errors, setErrors] = useState({});
+
+  useEffect(() => {
+    if (editProfile) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await fetch("/api/auth/me", { credentials: "include" });
+        const data = await res.json();
+        if (cancelled || !data.user?.profile) return;
+        setForm(apiProfileToForm(data.user.profile));
+      } catch {
+        /* ignore */
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [editProfile]);
+
+  useEffect(() => {
+    if (editProfile) setForm(apiProfileToForm(editProfile));
+  }, [editProfile]);
 
   const set = (k, v) => setForm((f) => ({ ...f, [k]: v }));
 
@@ -130,28 +189,36 @@ export default function RegisterForm({ editProfile = null, onSuccess }) {
       setStep(1);
       return;
     }
-    const id = editProfile ? editProfile.id : `user_${Date.now()}`;
-    const profile = {
+    const payload = {
       ...form,
-      id,
-      verified: editProfile ? editProfile.verified : false,
-      createdAt: editProfile ? editProfile.createdAt : Date.now(),
       photo:
         form.photo ||
         `https://ui-avatars.com/api/?name=${encodeURIComponent(form.name)}&background=c9873a&color=fff&size=300`,
     };
-    saveProfile(profile);
-    setCurrentUser(profile);
-    if (onSuccess) {
-      onSuccess(profile);
-      return;
-    }
-    setToast(
-      isEdit
-        ? "Profile updated! ✨"
-        : "Profile created! Welcome to Sampark Sutra 🎉",
-    );
-    setTimeout(() => router.push("/matches"), 1600);
+    fetch("/api/profiles", {
+      method: "POST",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    })
+      .then(async (res) => {
+        if (!res.ok) {
+          const data = await res.json().catch(() => ({}));
+          throw new Error(data.error || "Failed to save profile");
+        }
+        return res.json();
+      })
+      .then((data) => {
+        if (onSuccess) {
+          onSuccess(data.profile);
+          return;
+        }
+        setToast(isEdit ? "Profile updated! ✨" : "Profile created! Welcome 🎉");
+        setTimeout(() => router.push("/matches"), 1200);
+      })
+      .catch((e) => {
+        setToast(e.message || "Something went wrong");
+      });
   };
 
   const sel = (key, opts, err) => (

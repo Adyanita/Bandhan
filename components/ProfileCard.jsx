@@ -9,7 +9,8 @@ export default function ProfileCard({
   matchReasons = [],
   onShare,
 }) {
-  const age = getAge(profile.dob);
+  const ageRaw = getAge(profile.dob);
+  const age = Number.isFinite(ageRaw) ? ageRaw : "—";
   const heightShort = profile.height ? profile.height.split(" ")[0] : "";
 
   return (

@@ -100,25 +100,6 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* Stats Section */}
-        <section className="px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20">
-          <div className="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
-            {STATS.map(([n, l]) => (
-              <div
-                key={l}
-                className="bg-gradient-to-br from-stone-100 to-stone-50 border border-amber-200/50 rounded-xl sm:rounded-2xl p-4 sm:p-6 lg:p-8 text-center hover:shadow-lg transition-shadow"
-              >
-                <div className="font-serif font-bold text-2xl sm:text-3xl lg:text-4xl text-stone-800 mb-2">
-                  {n}
-                </div>
-                <div className="text-amber-700 font-sans text-xs sm:text-sm lg:text-base font-medium">
-                  {l}
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
         {/* How It Works Section */}
         <section className="px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-24">
           <div className="max-w-6xl mx-auto">

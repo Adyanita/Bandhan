@@ -6,12 +6,7 @@ import Navbar from "../../../components/Navbar";
 import ShareModal from "../../../components/ShareModal";
 import Icon from "../../../components/Icon";
 import Toast from "../../../components/Toast";
-import {
-  getProfileById,
-  getCurrentUser,
-  getSentInterests,
-  toggleInterest,
-} from "../../../lib/store";
+import { getSentInterests, toggleInterest } from "../../../lib/store";
 import { calcMatchScore, getAge } from "../../../lib/matching";
 
 const Section = ({ title, children }) => (
@@ -82,18 +77,36 @@ export default function ProfilePage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const p = getProfileById(id);
-    const u = getCurrentUser();
-    if (!p) {
-      router.push("/matches");
-      return;
-    }
-    setProfile(p);
-    setUser(u);
-    if (u && u.id !== p.id) setMatch(calcMatchScore(u, p));
-    setInterest(getSentInterests().includes(id));
-    setLoading(false);
-  }, [id]);
+    let cancelled = false;
+    (async () => {
+      const [profRes, meRes] = await Promise.all([
+        fetch(`/api/profiles/${id}`),
+        fetch("/api/auth/me", { credentials: "include" }),
+      ]);
+      const meJson = await meRes.json().catch(() => ({}));
+      const profJson = await profRes.json().catch(() => ({}));
+      if (cancelled) return;
+      if (!profRes.ok || !profJson.profile) {
+        router.push("/matches");
+        return;
+      }
+      const p = profJson.profile;
+      setProfile(p);
+      const me = meJson.user;
+      setUser(me);
+      const viewer = me?.profile;
+      if (viewer && viewer.id !== p.id) {
+        setMatch(calcMatchScore(viewer, p));
+      } else {
+        setMatch(null);
+      }
+      setInterest(getSentInterests().includes(id));
+      setLoading(false);
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [id, router]);
 
   const handleInterest = () => {
     const now = toggleInterest(id);
@@ -113,8 +126,9 @@ export default function ProfilePage() {
 
   if (!profile) return null;
 
-  const age = getAge(profile.dob);
-  const isOwnProfile = user?.id === profile.id;
+  const ageRaw = getAge(profile.dob);
+  const age = Number.isFinite(ageRaw) ? ageRaw : "—";
+  const isOwnProfile = user?.profile?.id === profile.id;
 
   return (
     <>
@@ -159,7 +173,10 @@ export default function ProfilePage() {
               }}
             >
               <img
-                src={profile.photo}
+                src={
+                  profile.photo ||
+                  `https://ui-avatars.com/api/?name=${encodeURIComponent(profile.name)}&background=c9873a&color=fff&size=400`
+                }
                 alt={profile.name}
                 style={{ width: "100%", aspectRatio: "1", objectFit: "cover" }}
                 onError={(e) => {
@@ -270,7 +287,7 @@ export default function ProfilePage() {
                 </Link>
               ) : (
                 <>
-                  {user ? (
+                  {user?.profile ? (
                     <button
                       onClick={handleInterest}
                       style={{

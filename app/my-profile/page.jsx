@@ -6,12 +6,7 @@ import RegisterForm from "../../components/RegisterForm";
 import ShareModal from "../../components/ShareModal";
 import Icon from "../../components/Icon";
 import Toast from "../../components/Toast";
-import {
-  getCurrentUser,
-  setCurrentUser,
-  saveProfile,
-  getSentInterests,
-} from "../../lib/store";
+import { getSentInterests } from "../../lib/store";
 import { getAge } from "../../lib/matching";
 import Link from "next/link";
 
@@ -41,38 +36,70 @@ const Section = ({ title, children }) => (
 
 export default function MyProfilePage() {
   const router = useRouter();
-  const [user, setUser] = useState(null);
+  const [account, setAccount] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [edit, setEdit] = useState(false);
   const [share, setShare] = useState(false);
   const [toast, setToast] = useState(null);
   const [interests, setInterests] = useState([]);
 
   useEffect(() => {
-    const u = getCurrentUser();
-    if (!u) {
-      router.push("/register");
-      return;
-    }
-    setUser(u);
-    setInterests(getSentInterests());
-  }, []);
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await fetch("/api/auth/me", { credentials: "include" });
+        const data = await res.json();
+        if (cancelled) return;
+        if (!data.user) {
+          router.replace("/auth/login");
+          return;
+        }
+        if (!data.user.profile) {
+          router.replace("/register");
+          return;
+        }
+        setAccount(data.user);
+        setInterests(getSentInterests());
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [router]);
+
+  const profile = account?.profile;
+  const age = profile ? getAge(profile.dob) : NaN;
+  const ageLabel = Number.isFinite(age) ? age : "—";
 
   const handleUpdate = (updated) => {
-    saveProfile(updated);
-    setCurrentUser(updated);
-    setUser(updated);
+    setAccount((a) => (a ? { ...a, profile: updated } : null));
     setEdit(false);
     setToast("Profile updated successfully! ✨");
   };
 
-  const logout = () => {
-    setCurrentUser(null);
+  const logout = async () => {
+    await fetch("/api/auth/logout", { method: "POST", credentials: "include" });
     router.push("/");
   };
 
-  if (!user) return null;
+  if (loading) {
+    return (
+      <>
+        <Navbar />
+        <main style={{ padding: 40, maxWidth: 1100, margin: "0 auto" }}>
+          <div className="skeleton" style={{ height: 500, borderRadius: 18 }} />
+        </main>
+      </>
+    );
+  }
 
-  const age = getAge(user.dob);
+  if (!profile) return null;
+
+  const photoSrc =
+    profile.photo ||
+    `https://ui-avatars.com/api/?name=${encodeURIComponent(profile.name)}&background=c9873a&color=fff&size=400`;
 
   if (edit) {
     return (
@@ -80,6 +107,7 @@ export default function MyProfilePage() {
         <Navbar />
         <main style={{ padding: "40px", maxWidth: 1000, margin: "0 auto" }}>
           <button
+            type="button"
             onClick={() => setEdit(false)}
             style={{
               display: "flex",
@@ -108,7 +136,7 @@ export default function MyProfilePage() {
               Edit Profile
             </h2>
           </div>
-          <RegisterForm editProfile={user} onSuccess={handleUpdate} />
+          <RegisterForm editProfile={profile} onSuccess={handleUpdate} />
         </main>
         {toast && <Toast message={toast} onClose={() => setToast(null)} />}
       </>
@@ -152,6 +180,7 @@ export default function MyProfilePage() {
           </div>
           <div style={{ display: "flex", gap: 10 }}>
             <button
+              type="button"
               onClick={() => setEdit(true)}
               style={{
                 background: "linear-gradient(135deg,#c9873a,#e8a857)",
@@ -170,6 +199,7 @@ export default function MyProfilePage() {
               <Icon name="edit" size={16} color="#fbf9f4" /> Edit Profile
             </button>
             <button
+              type="button"
               onClick={() => setShare(true)}
               style={{
                 background: "rgba(201,135,58,0.1)",
@@ -187,6 +217,7 @@ export default function MyProfilePage() {
               <Icon name="share" size={15} /> Share
             </button>
             <button
+              type="button"
               onClick={logout}
               style={{
                 background: "none",
@@ -214,7 +245,6 @@ export default function MyProfilePage() {
             alignItems: "start",
           }}
         >
-          {/* Sidebar */}
           <div>
             <div
               style={{
@@ -226,14 +256,14 @@ export default function MyProfilePage() {
               }}
             >
               <img
-                src={user.photo}
-                alt={user.name}
+                src={photoSrc}
+                alt={profile.name}
                 style={{ width: "100%", aspectRatio: "1", objectFit: "cover" }}
                 onError={(e) => {
-                  e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=c9873a&color=fff&size=400`;
+                  e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(profile.name)}&background=c9873a&color=fff&size=400`;
                 }}
               />
-              {user.verified && (
+              {profile.verified && (
                 <div
                   style={{
                     position: "absolute",
@@ -255,7 +285,6 @@ export default function MyProfilePage() {
               )}
             </div>
 
-            {/* Stats */}
             <div
               style={{
                 background: "rgba(201,135,58,0.08)",
@@ -276,12 +305,17 @@ export default function MyProfilePage() {
                   ["Interests Sent", interests.length.toString()],
                   [
                     "Member Since",
-                    new Date(user.createdAt).toLocaleDateString("en-IN", {
-                      month: "short",
-                      year: "numeric",
-                    }),
+                    profile.createdAt
+                      ? new Date(profile.createdAt).toLocaleDateString(
+                          "en-IN",
+                          {
+                            month: "short",
+                            year: "numeric",
+                          },
+                        )
+                      : "—",
                   ],
-                  ["Status", user.verified ? "Verified ✓" : "Pending"],
+                  ["Status", profile.verified ? "Verified ✓" : "Pending"],
                 ].map(([l, v]) => (
                   <div key={l} style={{ textAlign: "center" }}>
                     <div
@@ -309,7 +343,6 @@ export default function MyProfilePage() {
             </div>
           </div>
 
-          {/* Profile info */}
           <div className="fade-in">
             <div style={{ marginBottom: 24 }}>
               <h2
@@ -321,7 +354,7 @@ export default function MyProfilePage() {
                   marginBottom: 4,
                 }}
               >
-                {user.name}
+                {profile.name}
               </h2>
               <p
                 style={{
@@ -330,11 +363,11 @@ export default function MyProfilePage() {
                   fontSize: 15,
                 }}
               >
-                {age} years · {user.profession} · {user.city}
+                {ageLabel} years · {profile.profession} · {profile.city}
               </p>
             </div>
 
-            {user.about && (
+            {profile.about && (
               <Section title="About Me">
                 <p
                   style={{
@@ -344,7 +377,7 @@ export default function MyProfilePage() {
                     lineHeight: 1.8,
                   }}
                 >
-                  {user.about}
+                  {profile.about}
                 </p>
               </Section>
             )}
@@ -358,11 +391,11 @@ export default function MyProfilePage() {
             >
               <Section title="Basic Details">
                 {[
-                  ["Age", `${age} Years`],
-                  ["Height", user.height],
-                  ["Marital Status", user.maritalStatus],
-                  ["Diet", user.diet],
-                  ["Complexion", user.complexion],
+                  ["Age", `${ageLabel} Years`],
+                  ["Height", profile.height],
+                  ["Marital Status", profile.maritalStatus],
+                  ["Diet", profile.diet],
+                  ["Complexion", profile.complexion],
                 ].map(
                   ([l, v]) =>
                     v && (
@@ -400,11 +433,11 @@ export default function MyProfilePage() {
               </Section>
               <Section title="Education & Career">
                 {[
-                  ["Education", user.education],
-                  ["Profession", user.profession],
-                  ["Income", user.income],
-                  ["City", user.city],
-                  ["Languages", user.languages],
+                  ["Education", profile.education],
+                  ["Profession", profile.profession],
+                  ["Income", profile.income],
+                  ["City", profile.city],
+                  ["Languages", profile.languages],
                 ].map(
                   ([l, v]) =>
                     v && (
@@ -442,10 +475,10 @@ export default function MyProfilePage() {
               </Section>
             </div>
 
-            {user.hobbies && (
+            {profile.hobbies && (
               <Section title="Hobbies & Interests">
                 <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
-                  {user.hobbies.split(",").map((h, i) => (
+                  {profile.hobbies.split(",").map((h, i) => (
                     <span
                       key={i}
                       style={{
@@ -485,7 +518,7 @@ export default function MyProfilePage() {
                 <Icon name="heart" size={16} color="#fbf9f4" /> View My Matches
               </Link>
               <Link
-                href={`/profile/${user.id}`}
+                href={`/profile/${profile.id}`}
                 style={{
                   background: "rgba(201,135,58,0.1)",
                   color: "#a0704a",
@@ -504,7 +537,7 @@ export default function MyProfilePage() {
         </div>
       </main>
 
-      {share && <ShareModal profile={user} onClose={() => setShare(false)} />}
+      {share && <ShareModal profile={profile} onClose={() => setShare(false)} />}
       {toast && <Toast message={toast} onClose={() => setToast(null)} />}
     </>
   );

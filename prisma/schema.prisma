@@ -1,0 +1,63 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model User {
+  id           String    @id @default(cuid())
+  email        String    @unique
+  name         String?
+  passwordHash String
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  profile      Profile?
+}
+
+model Profile {
+  id               String   @id @default(cuid())
+  userId           String   @unique
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Personal
+  name             String
+  gender           String
+  dob              DateTime
+  height           String?
+  maritalStatus    String?
+  complexion       String?
+  bodyType         String?
+  diet             String?
+  photo            String?
+
+  // Background
+  religion         String
+  caste            String
+  city             String
+  languages        String?
+  about            String?
+  hobbies          String?
+
+  // Career
+  education        String
+  profession       String
+  income           String?
+
+  // Family
+  fatherProfession String?
+  motherProfession String?
+  siblings         String?
+
+  // Partner prefs
+  partnerReligion  String?
+  partnerCity      String?
+  partnerMinAge    Int?
+  partnerMaxAge    Int?
+
+  verified         Boolean  @default(false)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+

@@ -5,7 +5,6 @@ import ProfileCard from "../../components/ProfileCard";
 import FilterPanel from "../../components/FilterPanel";
 import ShareModal from "../../components/ShareModal";
 import Icon from "../../components/Icon";
-import { getAllProfiles, getCurrentUser } from "../../lib/store";
 import { calcMatchScore, applyFilters, getAge } from "../../lib/matching";
 import Link from "next/link";
 
@@ -19,26 +18,47 @@ export default function MatchesPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setUser(getCurrentUser());
-    setProfiles(getAllProfiles());
-    setLoading(false);
+    const load = async () => {
+      try {
+        const [meRes, profRes] = await Promise.all([
+          fetch("/api/auth/me", { credentials: "include" }),
+          fetch("/api/profiles", { credentials: "include" }),
+        ]);
+        const me = await meRes.json().catch(() => ({ user: null }));
+        const prof = await profRes.json().catch(() => ({ profiles: [] }));
+        setUser(me.user ?? null);
+        setProfiles(Array.isArray(prof.profiles) ? prof.profiles : []);
+      } finally {
+        setLoading(false);
+      }
+    };
+    load();
   }, []);
 
+  const viewerProfile = user?.profile ?? null;
+  const displayFirstName =
+    (viewerProfile?.name || user?.name || "there").split(" ")[0];
+
   const scored = useMemo(() => {
-    const filtered = applyFilters(profiles, user, filters, search);
+    const filtered = applyFilters(profiles, viewerProfile, filters, search);
     const withScore = filtered.map((p) => {
-      if (!user) return { ...p, score: null, reasons: [] };
-      const { score, reasons } = calcMatchScore(user, p);
+      if (!viewerProfile) return { ...p, score: null, reasons: [] };
+      const { score, reasons } = calcMatchScore(viewerProfile, p);
       return { ...p, score, reasons };
     });
     if (sortBy === "match")
       return withScore.sort((a, b) => (b.score ?? 0) - (a.score ?? 0));
     if (sortBy === "recent")
-      return withScore.sort((a, b) => (b.createdAt ?? 0) - (a.createdAt ?? 0));
+      return withScore.sort(
+        (a, b) =>
+          new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime(),
+      );
     if (sortBy === "age")
-      return withScore.sort((a, b) => getAge(a.dob) - getAge(b.dob));
+      return withScore.sort(
+        (a, b) => (getAge(a.dob) || 0) - (getAge(b.dob) || 0),
+      );
     return withScore;
-  }, [profiles, user, filters, search, sortBy]);
+  }, [profiles, viewerProfile, filters, search, sortBy]);
 
   return (
     <>
@@ -55,7 +75,9 @@ export default function MatchesPage() {
             }}
           >
             {user
-              ? `Matches for ${user.name.split(" ")[0]}`
+              ? viewerProfile
+                ? `Matches for ${displayFirstName}`
+                : `Welcome, ${displayFirstName}`
               : "Browse Profiles"}
           </h1>
           <p
@@ -66,8 +88,10 @@ export default function MatchesPage() {
             }}
           >
             {user
-              ? "Profiles sorted by compatibility score — highest match first"
-              : "Create your profile to see personalised compatibility scores"}
+              ? viewerProfile
+                ? "Profiles sorted by compatibility score — highest match first"
+                : "Create your profile to see personalised compatibility scores and opposite-gender matches"
+              : "Log in and create your profile to see personalised compatibility scores"}
           </p>
         </div>
 
@@ -148,9 +172,9 @@ export default function MatchesPage() {
             }}
           >
             {loading ? "Loading…" : `${scored.length} profiles found`}
-            {user && " · sorted by compatibility"}
+            {viewerProfile && " · sorted by compatibility"}
           </span>
-          {!user && (
+          {(!user || !viewerProfile) && (
             <Link
               href="/register"
               style={{
@@ -245,7 +269,7 @@ export default function MatchesPage() {
               <ProfileCard
                 key={p.id}
                 profile={p}
-                matchScore={user ? p.score : null}
+                matchScore={viewerProfile ? p.score : null}
                 matchReasons={p.reasons || []}
                 onShare={setShare}
               />
