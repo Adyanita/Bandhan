@@ -16,10 +16,18 @@ async function getUserIdFromCookie() {
 }
 
 export async function GET() {
-  const profiles = await prisma.profile.findMany({
-    orderBy: { createdAt: "desc" },
-  });
-  return NextResponse.json({ profiles });
+  try {
+    const profiles = await prisma.profile.findMany({
+      orderBy: { createdAt: "desc" },
+    });
+    return NextResponse.json({ profiles });
+  } catch (err) {
+    console.error("Prisma error:", err); // shows full error in Vercel logs
+    return NextResponse.json(
+      { error: err.message || "Unexpected error" },
+      { status: 500 },
+    );
+  }
 }
 
 export async function POST(req) {
@@ -29,11 +37,18 @@ export async function POST(req) {
   }
   const body = await req.json();
   // Convert numeric-like fields
-  const partnerMinAge = body.partnerMinAge ? parseInt(body.partnerMinAge, 10) : null;
-  const partnerMaxAge = body.partnerMaxAge ? parseInt(body.partnerMaxAge, 10) : null;
+  const partnerMinAge = body.partnerMinAge
+    ? parseInt(body.partnerMinAge, 10)
+    : null;
+  const partnerMaxAge = body.partnerMaxAge
+    ? parseInt(body.partnerMaxAge, 10)
+    : null;
   const dob = body.dob ? new Date(body.dob) : null;
   if (!dob) {
-    return NextResponse.json({ error: "Date of birth is required" }, { status: 400 });
+    return NextResponse.json(
+      { error: "Date of birth is required" },
+      { status: 400 },
+    );
   }
   // Upsert per user
   const profile = await prisma.profile.upsert({
@@ -96,4 +111,3 @@ export async function POST(req) {
   });
   return NextResponse.json({ profile });
 }
-
