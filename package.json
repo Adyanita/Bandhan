@@ -10,23 +10,22 @@
     "db:seed": "prisma db seed"
   },
   "dependencies": {
-    "@prisma/adapter-better-sqlite3": "^7.6.0",
-    "@prisma/client": "^7.6.0",
+    "@prisma/client": "^6.16.2",
     "@supabase/supabase-js": "^2.43.0",
     "bcryptjs": "^3.0.3",
-    "better-sqlite3": "^12.8.0",
     "jose": "^6.2.2",
     "next": "14.2.5",
-    "prisma": "^7.6.0",
     "react": "^18",
     "react-dom": "^18"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.2.1",
+    "@types/node": "^25.6.0",
     "autoprefixer": "^10.4.27",
     "eslint": "^8",
     "eslint-config-next": "14.2.5",
     "postcss": "^8.5.8",
+    "prisma": "^6.16.2",
     "tailwindcss": "^4.2.1",
     "tsx": "^4.19.3"
   }

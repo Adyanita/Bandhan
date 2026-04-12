@@ -3,47 +3,48 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model User {
-  id           String    @id @default(cuid())
-  email        String    @unique
+  id           String   @id @default(cuid())
+  email        String   @unique
   name         String?
   passwordHash String
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
   profile      Profile?
 }
 
 model Profile {
-  id               String   @id @default(cuid())
-  userId           String   @unique
-  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id     String @id @default(cuid())
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   // Personal
-  name             String
-  gender           String
-  dob              DateTime
-  height           String?
-  maritalStatus    String?
-  complexion       String?
-  bodyType         String?
-  diet             String?
-  photo            String?
+  name          String
+  gender        String
+  dob           DateTime
+  height        String?
+  maritalStatus String?
+  complexion    String?
+  bodyType      String?
+  diet          String?
+  photo         String?
 
   // Background
-  religion         String
-  caste            String
-  city             String
-  languages        String?
-  about            String?
-  hobbies          String?
+  religion  String
+  caste     String
+  city      String
+  languages String?
+  about     String?
+  hobbies   String?
 
   // Career
-  education        String
-  profession       String
-  income           String?
+  education  String
+  profession String
+  income     String?
 
   // Family
   fatherProfession String?
@@ -51,13 +52,12 @@ model Profile {
   siblings         String?
 
   // Partner prefs
-  partnerReligion  String?
-  partnerCity      String?
-  partnerMinAge    Int?
-  partnerMaxAge    Int?
+  partnerReligion String?
+  partnerCity     String?
+  partnerMinAge   Int?
+  partnerMaxAge   Int?
 
-  verified         Boolean  @default(false)
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
+  verified  Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
-
